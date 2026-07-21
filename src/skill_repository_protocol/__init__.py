@@ -1,0 +1,68 @@
+"""Skill Repository Protocol Python 公共 API。"""
+
+from .errors import (
+    AmbiguousSkillError,
+    DuplicateSkillError,
+    InvalidArgumentError,
+    InvalidPathError,
+    InvalidURIError,
+    ManifestError,
+    MetadataMismatchError,
+    ResourceNotFoundError,
+    SchemeAlreadyRegisteredError,
+    SchemeMismatchError,
+    SkillNotFoundError,
+    SRPError,
+    TransportError,
+    TransportTimeoutError,
+    UndeclaredResourceError,
+    UnsupportedSchemeError,
+)
+from .models import ParsedURI, RepositoryRef, Skill, SkillIndexEntry, SkillRef
+from .parser import SRPParser, parse_skill_list
+from .paths import append_uri_path, join_relative_paths, normalize_relative_path
+from .transports import (
+    FileTransport,
+    GitTransport,
+    HTTPTransport,
+    S3Transport,
+    Transport,
+    TransportRegistry,
+    TransportResolver,
+)
+
+__all__ = [
+    "AmbiguousSkillError",
+    "DuplicateSkillError",
+    "FileTransport",
+    "GitTransport",
+    "HTTPTransport",
+    "InvalidArgumentError",
+    "InvalidPathError",
+    "InvalidURIError",
+    "ManifestError",
+    "MetadataMismatchError",
+    "ParsedURI",
+    "RepositoryRef",
+    "ResourceNotFoundError",
+    "S3Transport",
+    "SRPError",
+    "SRPParser",
+    "SchemeAlreadyRegisteredError",
+    "SchemeMismatchError",
+    "Skill",
+    "SkillIndexEntry",
+    "SkillNotFoundError",
+    "SkillRef",
+    "Transport",
+    "TransportError",
+    "TransportRegistry",
+    "TransportResolver",
+    "TransportTimeoutError",
+    "UndeclaredResourceError",
+    "UnsupportedSchemeError",
+    "append_uri_path",
+    "join_relative_paths",
+    "normalize_relative_path",
+    "parse_skill_list",
+]
