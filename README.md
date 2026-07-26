@@ -178,10 +178,10 @@ parser = SRPParser(
 - [x] `git://`
 - [x] 自定义 scheme
 
-## 解析器语言支持
+## 解析器SDK 支持
 
-- [x] Python
-- [ ] Go（后续在独立仓库实现）
+- [x] Python: 本仓库
+- [ ] Go: [srp-parser-golang](https://github.com/feng000000/srp-parser-golang)
 
 ## 代码结构
 
