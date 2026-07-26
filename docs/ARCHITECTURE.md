@@ -440,6 +440,9 @@ SRPParser.read_additional_file(...)
 
 - 拒绝空路径和绝对路径。
 - 拒绝 `.`、`..`、空路径段和反斜杠。
+- `skill_list.json` 中目录型 `path` 是输入边界例外：解析器先移除一个
+  或多个末尾正斜杠，再执行上述通用校验；中间空路径段仍然非法。
+- `addition_files` 与 transport 资源路径不应用该例外。
 - 拒绝包含 `://` 的 scheme 注入。
 - URL path 按段 percent-encode，不使用可能覆盖 base path 的通用 URL join。
 - File/Git 在解析真实路径后再次检查目标仍位于仓库根目录。

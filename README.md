@@ -4,6 +4,8 @@ Skill 存储库协议（SRP）定义怎样通过一个 skill URL 访问 skill。
 目的是将 skill 与文件系统解耦，允许通过 `file://`、`http://`、
 `https://`、`s3://`、`git://` 等 scheme 访问。
 
+- [golang 实现](https://github.com/feng000000/srp-parser-golang)
+
 ## 基本结构
 
 SRP 使用 URI 的基本结构：
@@ -50,9 +52,11 @@ scheme://[userinfo@]host[:port]/path/to/resource?query=value#fragment
 
    - `name` 应与 `SKILL.md` 中的 name 相符。
    - `description` 应与 skill 元数据中的 description 相符。
-   - `path` 是拼接到 `${URI}/` 后的相对路径。
+   - `path` 是拼接到 `${URI}/` 后的相对目录路径。允许一个或多个末尾
+     正斜杠；解析器会将其移除，因此 `example/` 与 `example` 等价。
+     中间连续斜杠、绝对路径、反斜杠及 `.`、`..` 路径段仍然非法。
    - `addition_files` 可选，默认值为 `[]`；其路径拼接在
-     `${URI}/{path}/` 后。
+     `${URI}/{path}/` 后。它表示具体资源文件，不接受末尾斜杠。
    - `version` 可选，默认值为 `v1.0.0`；版本由 skill 自己管理，
      解析器不会根据 version 修改 path。
 

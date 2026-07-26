@@ -8,6 +8,7 @@ import pytest
 from skill_repository_protocol import (
     AmbiguousSkillError,
     DuplicateSkillError,
+    InvalidPathError,
     MetadataMismatchError,
     ParsedURI,
     RepositoryRef,
@@ -72,6 +73,73 @@ def test_parse_skill_list_applies_defaults() -> None:
     assert skill.version == "v1.0.0"
     assert skill.path == "stable/x"
     assert skill.addition_files == ()
+
+
+@pytest.mark.parametrize(
+    ("path", "expected"),
+    [
+        ("example/", "example"),
+        ("stable/example///", "stable/example"),
+    ],
+)
+def test_parse_skill_list_normalizes_trailing_path_slashes(
+    path: str, expected: str
+) -> None:
+    repository = RepositoryRef("repo", ParsedURI.parse("file:///tmp/repo"))
+    data = json.dumps(
+        {
+            "skill_list": [
+                {"name": "x", "description": "desc", "path": path}
+            ]
+        }
+    ).encode()
+
+    skill = parse_skill_list(data, repository)[0]
+
+    assert skill.path == expected
+
+
+def test_parser_loads_resources_from_path_with_trailing_slash(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "repo"
+    _write_repository(root, path="example/")
+
+    parser = SRPParser([root.as_uri()])
+    skill = parser.get_skill("example")
+
+    assert skill.ref.path == "example"
+    assert skill.manifest["name"] == "example"
+    assert parser.read_additional_file("example", "scripts/tool.py") == b"tool"
+
+
+@pytest.mark.parametrize(
+    ("path", "addition_files"),
+    [
+        ("///", []),
+        ("stable//example/", []),
+        ("example", ["scripts/"]),
+    ],
+)
+def test_parse_skill_list_rejects_unsafe_trailing_slash_inputs(
+    path: str, addition_files: list[str]
+) -> None:
+    repository = RepositoryRef("repo", ParsedURI.parse("file:///tmp/repo"))
+    data = json.dumps(
+        {
+            "skill_list": [
+                {
+                    "name": "x",
+                    "description": "desc",
+                    "path": path,
+                    "addition_files": addition_files,
+                }
+            ]
+        }
+    ).encode()
+
+    with pytest.raises(InvalidPathError):
+        parse_skill_list(data, repository)
 
 
 def test_parse_skill_list_rejects_invalid_and_duplicate_entries() -> None:

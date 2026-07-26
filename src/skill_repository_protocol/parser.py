@@ -65,6 +65,7 @@ def parse_skill_list(data: bytes, repository: RepositoryRef) -> list[SkillRef]:
     for raw in document["skill_list"]:
         if not isinstance(raw, dict):
             raise ManifestError("Each skill_list item must be an object")
+        path = _required_string(raw.get("path"), "path").rstrip("/")
         additions = raw.get("addition_files", [])
         if not isinstance(additions, list) or not all(
             isinstance(item, str) for item in additions
@@ -73,9 +74,7 @@ def parse_skill_list(data: bytes, repository: RepositoryRef) -> list[SkillRef]:
         entry = SkillIndexEntry(
             name=_required_string(raw.get("name"), "name"),
             description=_required_string(raw.get("description"), "description"),
-            path=normalize_relative_path(
-                _required_string(raw.get("path"), "path")
-            ),
+            path=normalize_relative_path(path),
             version=_required_string(raw.get("version", "v1.0.0"), "version"),
             addition_files=tuple(
                 normalize_relative_path(item) for item in additions
