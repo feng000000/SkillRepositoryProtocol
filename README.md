@@ -181,7 +181,7 @@ parser = SRPParser(
 ## 解析器SDK 支持
 
 - [x] Python: 本仓库
-- [ ] Go: [srp-parser-golang](https://github.com/feng000000/srp-parser-golang)
+- [x] Go: [srp-parser-golang](https://github.com/feng000000/srp-parser-golang)
 
 ## 代码结构
 
